@@ -1,5 +1,6 @@
 import pickle
-from bitstring import BitStream, BitArray
+from bitstring import BitArray
+import math
 from tree import Node
 import argparse
 
@@ -74,11 +75,30 @@ def load_obj(name):
         return pickle.load(f)
 
 
+def expected_length(tree: Node, queue: list):
+    dictionary: dict = tree2dict(tree)
+    result = 0
+    for item in queue:
+        result += item.value[0] * len(dictionary[item.value[1]])
+    return result
+
+
+def symbol_entropy(queue: list):
+    result = 0
+    for item in queue:
+        if item.value[0] == 0:
+            continue
+        result += item.value[0] * math.log2(1 / item.value[0])
+    return result
+
+
 if __name__ == "__main__":
     count, total = get_characters_count(args.input)
     queue = create_queue(count, total)
     tree = huffman(queue)
     save_obj(tree2dict(tree), out_path.split('.')[0])
-    print(tree2dict(tree))
+    # print(tree2dict(tree))
     with open(out_path, 'wb') as f:
         compress(args.input, tree2dict(tree)).tofile(f)
+    print("Compression finished with expected length: {}".format(expected_length(tree, create_queue(count, total))))
+    print("Entropy per symbol: {}".format(symbol_entropy(create_queue(count, total))))
