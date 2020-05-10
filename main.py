@@ -24,7 +24,7 @@ def get_characters_count(input_path: str) -> tuple:
 
 def create_queue(x: list) -> PriorityQueue:
     Q: PriorityQueue = PriorityQueue()
-    for item, i in enumerate(x):
+    for i, item in enumerate(x):
         Q.put((item, chr(i)))
     return Q
 
@@ -32,5 +32,3 @@ def create_queue(x: list) -> PriorityQueue:
 if __name__ == "__main__":
     count, total = get_characters_count(args.input)
     queue = create_queue(count)
-    print(count)
-    print(total)
