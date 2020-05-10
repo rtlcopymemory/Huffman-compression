@@ -1,0 +1,2 @@
+# Huffman-compression
+Class assignment
