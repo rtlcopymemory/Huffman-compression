@@ -1,6 +1,4 @@
 from bitstring import BitArray
-import math
-from tree import Node
 import argparse
 
 from utils.analysis import expected_length, symbol_entropy
@@ -22,7 +20,9 @@ def compress(input_path: str, compression_dict: dict) -> BitArray:
         for line in f:
             for char in line:
                 temp_result += compression_dict[char]
-    bits = BitArray(bin=temp_result)
+    end_padding = len(temp_result) % 8 if len(temp_result) % 8 != 0 else 0
+    end_offset: str = bin(8 - end_padding)[2:].zfill(8)
+    bits = BitArray(bin=end_offset + temp_result)
     return bits
 
 
