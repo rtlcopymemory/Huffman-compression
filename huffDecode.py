@@ -36,7 +36,7 @@ def consume(sequence: str, dictionary: dict) -> tuple:
 def decompress(input_path: str, dictionary: dict):
     file: str = get_bit_sequence(input_path)
     padding: int = int(file[:8], 2)
-    file = file[8:-padding]
+    file = file[8:-padding] if padding != 0 else file[8:]
     result: str = ""
     while len(file) > 0:
         character, new_file = consume(file, dictionary)
